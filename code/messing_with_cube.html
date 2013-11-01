@@ -14,11 +14,20 @@
 		</style>
 	</head>
 	<body>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script src="./objFileContents.js"></script>
 		<script src="../build/three.min.js"></script>
 
 		<script src="js/libs/stats.min.js"></script>
 
 		<script>
+
+			$( document ).ready(function() {
+                objFileContents.fetch();
+                objFileContents.parse();
+                console.log(objFileContents.vectors);
+                //objFileContents.print($("body"));
+            });
 
 			var container, stats;
 
@@ -45,6 +54,7 @@
 
 			
 			function getData(){
+
 				geometry = new THREE.Geometry();
 				geometry.vertices.push( new THREE.Vector3( 0, 0, 0 ) ); 
 				geometry.vertices.push( new THREE.Vector3( 10, 0, 0 ) ); 
@@ -52,6 +62,13 @@
 				geometry.vertices.push( new THREE.Vector3( 0, 10, 0 ) ); 
 				geometry.faces.push(new THREE.Face3(0,1,2 ));
 				geometry.faces.push(new THREE.Face3(0,2,3 ));
+
+				//side face
+				//geometry.vertices.push( new THREE.Vector3( 0, 10, 2 ) ); 
+				//geometry.vertices.push( new THREE.Vector3( 0, 0, 2 ) );
+				//geometry.faces.push(new THREE.Face3(0,3,4 ));
+				//geometry.faces.push(new THREE.Face3(0,2,3 ));
+
 
 				geometry.computeCentroids();
     			geometry.computeFaceNormals();
