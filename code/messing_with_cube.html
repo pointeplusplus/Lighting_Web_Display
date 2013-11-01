@@ -43,7 +43,7 @@
 			init();
 			animate();
 
-			/*
+			
 			function getData(){
 				geometry = new THREE.Geometry();
 				geometry.vertices.push( new THREE.Vector3( 0, 0, 0 ) ); 
@@ -57,7 +57,7 @@
     			geometry.computeFaceNormals();
     			geometry.computeVertexNormals();
 			}
-			*/
+			
 			function init() {
 
 				container = document.createElement( 'div' );
@@ -77,7 +77,7 @@
 				camera.rotation.y = 0;
 
 				scene = new THREE.Scene();
-				/*
+				
 				getData();
 				for ( var i = 0; i < geometry.faces.length; i += 2 ) {
 
@@ -92,8 +92,8 @@
 				//material.side = THREE.DoubleSide;
         		//mesh.doubleSided = true;
         		scene.add(mesh);
-				*/
 				
+				/*
 				// Wall 1
 
 				var wall1Geometry = new THREE.CubeGeometry( 2, 10, 12 );
@@ -129,7 +129,7 @@
 				wall2.position.x = 10;
 				wall1.rotation.y =  0.1;
 				scene.add( wall2 );
-				
+				*/
 				// Plane
 
 				//gives x and y coordinates
