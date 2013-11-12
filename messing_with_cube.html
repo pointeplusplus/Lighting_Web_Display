@@ -22,16 +22,24 @@
 
 		<script>
 
-			$( document ).ready(function() {
-                objFileContents.fetch();
-                objFileContents.parse();
-                console.log(objFileContents.vectors);
-                //objFileContents.print($("body"));
-            });
+			
+            objFileContents.fetch();
+            objFileContents.parse();
+            console.log(objFileContents.vectors);
+            //objFileContents.print($("body"));
+           
 
 			var container, stats;
 
 			var camera, scene, renderer;
+
+			//stores data found in obj file
+			var v = [];
+			var vt = [];
+			var vn = [];
+			var o;
+			var debug_counter = 0;
+			var debug_v_counter = 0;
 
 			//meshes for different items
 			var wall1, wall2,plane;
@@ -56,18 +64,52 @@
 			function getData(){
 
 				geometry = new THREE.Geometry();
-				geometry.vertices.push( new THREE.Vector3( 0, 0, 0 ) ); 
-				geometry.vertices.push( new THREE.Vector3( 10, 0, 0 ) ); 
-				geometry.vertices.push( new THREE.Vector3( 10, 10, 0 ) ); 
-				geometry.vertices.push( new THREE.Vector3( 0, 10, 0 ) ); 
-				geometry.faces.push(new THREE.Face3(0,1,2 ));
-				geometry.faces.push(new THREE.Face3(0,2,3 ));
 
-				//side face
-				//geometry.vertices.push( new THREE.Vector3( 0, 10, 2 ) ); 
-				//geometry.vertices.push( new THREE.Vector3( 0, 0, 2 ) );
-				//geometry.faces.push(new THREE.Face3(0,3,4 ));
-				//geometry.faces.push(new THREE.Face3(0,2,3 ));
+				//loop through the arrays from the file data and analyze their contents
+				//start at 1 because line 1 is the name of the .mtl file 
+				console.log("This is right before the for loop");
+				console.log(objFileContents.vectors);
+				console.log(objFileContents.vectors.length);
+				for(o = 1; o < objFileContents.vectors.length; o++){
+					debug_counter++;
+					//new vertex defined on this line 
+					if(objFileContents.vectors[o][0] == "v"){
+						debug_counter++;
+						//use v.length to add one to the length and add x,y, and z components
+
+						console.log("This is inside the loop.");
+						console.log(o);
+						v.push(new Array(0));
+						v[v.length-1].push(objFileContents.vectors[o][1]);
+						v[v.length-1].push(objFileContents.vectors[o][2]);
+						v[v.length-1].push(objFileContents.vectors[o][3]);
+						//v[v.length-1]["x"] = objFileContents[o][1];
+						//v[v.length-1]["y"] = objFileContents[o][2];
+						//v[v.length-1]["z"] = objFileContents[o][3];
+						geometry.vertices.push( new THREE.Vector3( v[v.length-1][0], v[v.length-1][1], v[v.length-1][2]) ); 
+					}
+					else if(objFileContents[o][0] == "vt"){
+						//vt.push("vt");
+						//vt[vt.length-1].x = objFileContents[o][1];
+						//vt[vt.length-1].y = objFileContents[o][2];
+					}
+					else if(objFileContents[o][0] == "vn"){
+						//vn.push("vn");
+						//vn[vn.length].x = objFileContents[o][1];
+						//vn[vn.length].y = objFileContents[o][2];
+						//vn[vn.length].z = objFileContents[o][3];
+					}
+					//adding a new face
+					else if(objFileContents[o][0] == "f"){
+						//format is #/#/#.  Pull apart to only grab # in temp_vertex_*[0]
+						//var temp_vertex_x = objFileContents[o][1].split("/");
+						//var temp_vertex_y = objFileContents[o][1].split("/");
+						//var temp_vertex_z = objFileContents[o][1].split("/");
+
+						//geometry.faces.push( new THREE.Face3(temp_vertex_x[0],temp_vertex_y[0],temp_vertex_z[0] ) );
+					}
+				}
+
 
 
 				geometry.computeCentroids();
@@ -94,7 +136,7 @@
 				camera.rotation.y = 0;
 
 				scene = new THREE.Scene();
-				
+				debug_counter = 20;
 				getData();
 				for ( var i = 0; i < geometry.faces.length; i += 2 ) {
 
