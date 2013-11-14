@@ -26,7 +26,6 @@
             objFileContents.fetch();
             objFileContents.parse();
             console.log(objFileContents.vectors);
-            //objFileContents.print($("body"));
            
 
 			var container, stats;
@@ -38,11 +37,8 @@
 			var vt = [];
 			var vn = [];
 			var o;
-			var debug_counter = 0;
-			var debug_v_counter = 0;
 
 			//meshes for different items
-			var wall1, wall2,plane;
 			var mesh;
 
 			var targetRotation = 0;
@@ -67,9 +63,6 @@
 
 				//loop through the arrays from the file data and analyze their contents
 				//start at 1 because line 1 is the name of the .mtl file 
-				console.log("This is right before the for loop");
-				console.log(objFileContents.vectors);
-				console.log(objFileContents.vectors.length);
 				for(o = 1; o < objFileContents.vectors.length; o++){
 					debug_counter++;
 					//new vertex defined on this line 
@@ -85,19 +78,10 @@
 						v[v.length-1].push(objFileContents.vectors[o][1]);
 						v[v.length-1].push(objFileContents.vectors[o][2]);
 						v[v.length-1].push(objFileContents.vectors[o][3]);
-						//console.log("This is after pushing vertices");
-
-						//failed attempt to store vertex coordinates in a vector (part 2)
-						//v[v.length-1][0] = objFileContents.vectors[o][1];
-						//v[v.length-1][1] = objFileContents.vectors[o][2];
-						//v[v.length-1][2] = objFileContents.vectors[o][3];
-						//console.log("This is after adding vertices");
 
 						//how I would like to add vertices to the geometry
 						geometry.vertices.push( new THREE.Vector3( 50*v[v.length-1][0], 50*v[v.length-1][1], 50*v[v.length-1][2]) ); 
-						//console.log("this is after adding a vertex to the geometry");
 						
-
 					}
 					else if(objFileContents.vectors[o][0] == "vt"){
 						vt.push(new Array());
@@ -112,42 +96,20 @@
 					}
 					//adding a new face
 					else if(objFileContents.vectors[o][0] == "f"){
-						//console.log("Face: " +o);
-						//console.log("I found a face");
-						//format is #/#/#.  Pull apart to only grab # in temp_vertex_*[0]
-						//console.log(objFileContents.vectors[o][1]);
-						var temp_vertex_1 = objFileContents.vectors[o][1];
-						//console.log(temp_vertex_1);
-						//console.log(objFileContents.vectors[o][2]);
-						var temp_vertex_2 = objFileContents.vectors[o][2];
 						
+						//format is #/#/#.  Pull apart to only grab # in temp_vertex_*[0]
+						var temp_vertex_1 = objFileContents.vectors[o][1];
+						var temp_vertex_2 = objFileContents.vectors[o][2];
 						var temp_vertex_3 = objFileContents.vectors[o][3];
 						temp_vertex_1 = temp_vertex_1.split("/");
-						//console.log(temp_vertex_1[0]);
 						temp_vertex_2 = temp_vertex_2.split("/");
-						//console.log(temp_vertex_2[0]);
 						temp_vertex_3 = temp_vertex_3.split("/");
-						//console.log(temp_vertex_3[0]);
+
 						//using -1 because the vertices are 1-indexed
 						geometry.faces.push( new THREE.Face3(temp_vertex_1[0]-1,temp_vertex_2[0]-1,temp_vertex_3[0]-1 ) );
 					}
 				}
-				/*
-				//var vertex_loop = 0;
-				console.log(geometry.vertices.length);
-				//This for loop tests to make sure the vertices look correct
-				
-				for(var vertex_loop = 50; vertex_loop < 55; vertex_loop++){
-					console.log("Vertex: " + vertex_loop);
-					console.log(geometry.vertices[vertex_loop]);
-				}
-							
-				
-				console.log(geometry.faces.length);
-				for(var face_loop = 0; face_loop < 6; face_loop++){
-					console.log(geometry.faces[face_loop]);
-				}
-				*/
+
 
 				geometry.computeCentroids();
     			geometry.computeFaceNormals();
@@ -191,72 +153,6 @@
 				mesh.position.z = 0;
 				mesh.rotation.y = 0;
         		scene.add(mesh);
-
-				/*
-				//Single triangle
-				var triangleGeometry = new THREE.Geometry();
-				triangleGeometry.vertices.push( new THREE.Vector3( 0.0,0.0,1.0) );
-				triangleGeometry.vertices.push( new THREE.Vector3( -10.0,5.0,0.0) );
-				triangleGeometry.vertices.push( new THREE.Vector3( 5.0,10.0,5.0) );
-				triangleGeometry.faces.push( new THREE.Face3(0,1,2 ) );
-				var hex = Math.random() * 0xffffff;
-				triangleGeometry.faces[ 0 ].color.setHex( hex );
-				Tmesh = new THREE.Mesh( triangleGeometry, material );
-				scene.add(Tmesh);
-				
-				
-				
-				// Wall 1
-
-				var wall1Geometry = new THREE.CubeGeometry( 2, 10, 12 );
-
-				for ( var i = 0; i < wall1Geometry.faces.length; i += 2 ) {
-
-					var hex = Math.random() * 0xffffff;
-					wall1Geometry.faces[ i ].color.setHex( hex );
-					wall1Geometry.faces[ i + 1 ].color.setHex( hex );
-
-				}
-
-				var material = new THREE.MeshBasicMaterial( { vertexColors: THREE.FaceColors, overdraw: 0.5 } );
-
-				wall1 = new THREE.Mesh( wall1Geometry, material );
-				wall1.position.y = 5;
-				wall1.position.z = 10;
-				wall1.rotation.y =  - 0.1
-				scene.add( wall1 );
-
-				// Wall 2
-
-				var wall2Geometry = new THREE.CubeGeometry(2, 10, 8);
-
-				//var material = new THREE.MeshBasicMaterial( { color: 0xddff44, overdraw: 0.5 } );
-				var material = new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'textures/pointe.jpg' ) } );
-			
-
-
-				wall2 = new THREE.Mesh( wall2Geometry, material );
-				wall2.position.y = 5;
-				wall2.position.z = 10;
-				wall2.position.x = 10;
-				wall1.rotation.y =  0.1;
-				scene.add( wall2 );
-				
-				// Plane
-
-				//gives x and y coordinates
-				var floorGeometry = new THREE.PlaneGeometry( 30, 30 );
-
-				//rotates plane to be in the x-z plane
-				floorGeometry.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) );
-
-				//var material = new THREE.MeshBasicMaterial( { color: 0xff0000, overdraw: 0.5 } );
-				var material = new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( '../textures/yosemite.jpg' ) } );
-
-
-				plane = new THREE.Mesh( floorGeometry, material );
-				scene.add( plane );
-				*/
 
 				renderer = new THREE.CanvasRenderer();
 				renderer.setSize( window.innerWidth, window.innerHeight );
