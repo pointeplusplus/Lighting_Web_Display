@@ -8,13 +8,14 @@ var objFileContents = new function(){
 			this.vectors[i] = this.vectors[i].split(" ");  
 	},
 
-	this.fetch = function() {
+	this.fetch = function(file_name) {
 		$.ajax({
-			url: "./foo.obj",
+			url: file_name,
 			async: false,
 			success: function (data){
 				objFileContents.rawData = data;
 				console.log("success");
+				console.log(file_name);
 			 }
 		});
 	},

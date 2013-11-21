@@ -23,7 +23,7 @@
 		<script>
 
 			
-            objFileContents.fetch();
+            objFileContents.fetch("./finished_geometry/foo.obj");
             objFileContents.parse();
             console.log(objFileContents.vectors);
            
@@ -101,7 +101,9 @@
 						var temp_vertex_1 = objFileContents.vectors[o][1];
 						var temp_vertex_2 = objFileContents.vectors[o][2];
 						var temp_vertex_3 = objFileContents.vectors[o][3];
+						console.log(temp_vertex_1);
 						temp_vertex_1 = temp_vertex_1.split("/");
+						console.log(temp_vertex_1);
 						temp_vertex_2 = temp_vertex_2.split("/");
 						temp_vertex_3 = temp_vertex_3.split("/");
 
@@ -128,8 +130,8 @@
 				info.style.textAlign = 'center';
 				info.innerHTML = 'Drag to spin the cube';
 				container.appendChild( info );
-
-				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 1000 );
+				//last two values are near and far clipping planes
+				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 10, 75 );
 				camera.position.y = 15;
 				camera.position.z = 45;
 				camera.rotation.y = 0;
@@ -263,9 +265,9 @@
 
 			function render() {
 
-				//wall1.rotation.y += ( targetRotation - wall1.rotation.y ) * 0.05;
-				//plane.rotation.y = wall1.rotation.y;
-				camera.rotation.y += ( targetRotation - camera.rotation.y ) * 0.05;
+				mesh.rotation.y += ( targetRotation - mesh.rotation.y ) * 0.05;
+				
+				//camera.rotation.y += ( targetRotation - camera.rotation.y ) * 0.05;
 				renderer.render( scene, camera );
 
 			}

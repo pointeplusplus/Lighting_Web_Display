@@ -100,15 +100,15 @@
 
 					}
 					else if(objFileContents.vectors[o][0] == "vt"){
-						//vt.push("vt");
-						//vt[vt.length-1].x = objFileContents.vectors[o][1];
-						//vt[vt.length-1].y = objFileContents.vectors[o][2];
+						vt.push(new Array());
+						vt[vt.length-1].push(objFileContents.vectors[o][1]);
+						vt[vt.length-1].push(objFileContents.vectors[o][2]);
 					}
 					else if(objFileContents.vectors[o][0] == "vn"){
-						//vn.push("vn");
-						//vn[vn.length].x = objFileContents.vectors[o][1];
-						//vn[vn.length].y = objFileContents.vectors[o][2];
-						//vn[vn.length].z = objFileContents.vectors[o][3];
+						vn.push(new Array());
+						vn[vn.length-1].push(objFileContents.vectors[o][1]);
+						vn[vn.length-1].push(objFileContents.vectors[o][2]);
+						vn[vn.length-1].push(objFileContents.vectors[o][3]);
 					}
 					//adding a new face
 					else if(objFileContents.vectors[o][0] == "f"){
