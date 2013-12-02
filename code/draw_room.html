@@ -40,6 +40,7 @@
 
 			var o;
 
+			var debug_counter = 0;
 			//meshes for different items
 			var mesh = [];
 			var material = [];
@@ -59,14 +60,15 @@
 			var windowHalfY = window.innerHeight / 2;
 
 			//variables for storing image info
-			var image_names = [];
-			var image_textures = [];
-			var image_materials = [];
+			//var image_names = [];
+			//var image_textures = [];
+			//var image_materials = [];
 
 			//geometry for the faces
 			var geometries = [];
-			var meshes = [];
+			//var meshes = [];
 			var all_vertices = [];
+
 			init();
 			animate();
 
@@ -136,16 +138,16 @@
 						geometries[geometries.length-1].vertices = all_vertices;
 						if(objFileContents.vectors[o][1] == "EXTRA_wall_top"){
 							var hex = Math.random() * 0xffffff;
-							image_materials.push(new THREE.MeshBasicMaterial ({color: hex}));
+							//image_materials.push(new THREE.MeshBasicMaterial ({color: hex}));
 
 						}
 						else{
 							//get file from other folder
-							image_names.push("../textures/" + objFileContents.vectors[o][1] + "_texture.ppm");
+							//image_names.push("../textures/" + objFileContents.vectors[o][1] + "_texture.ppm");
 							//last image added
-							image_textures.push(THREE.ImageUtils.loadTexture( image_names[image_names.length - 1] ));
+							//image_textures.push(THREE.ImageUtils.loadTexture( image_names[image_names.length - 1] ));
 							//create a material out of the loaded image
-							image_materials.push(new THREE.MeshBasicMaterial( {map: image_textures[image_textures.length-1]} ));
+							//image_materials.push(new THREE.MeshBasicMaterial( {map: image_textures[image_textures.length-1]} ));
 						}
 					}
 				}
@@ -160,6 +162,8 @@
 
 			
 			function init() {
+				debug_counter++;
+				console.log("debug counter " + debug_counter);
 
 				container = document.createElement( 'div' );
 				document.body.appendChild( container );
@@ -183,7 +187,7 @@
 
 				scene = new THREE.Scene();
 				getObjData();
-				console.log("Num geometries: "  + geometries.length + "  Num materials: " + image_materials.length);
+				//console.log("Num geometries: "  + geometries.length + "  Num materials: " + image_materials.length);
 
 				for(var g = 0; g < geometries.length; g++){
 					//meshes.push(new THREE.Mesh( geometries[g], image_materials[g] ));
@@ -199,8 +203,7 @@
 					mesh[g].position.z = 0;
 					mesh[g].rotation.y = 0;
 					scene.add(mesh[g]);
-					//image_materials[g].side = THREE.DoubleSide;
-					//meshes[g].doubleSided = true;
+		
 					//meshes[g].position.x = 0;
 					//meshes[g].position.y = 0;
 					//meshes[g].position.z = 0;
@@ -328,9 +331,13 @@
 			}
 
 			function render() {
-				for(var m = 0; m < meshes.length; m++){
-					meshes[m].rotation.y += ( targetRotationX - meshes[m].rotation.y ) * 0.05;
-					meshes[m].rotation.x += ( targetRotationY - meshes[m].rotation.x ) * 0.05;
+				debug_counter++;
+				console.log("debug counter " + debug_counter);
+				for(var m = 0; m < mesh.length; m++){
+					debug_counter++;
+				console.log("debug counter " + debug_counter);
+					mesh[m].rotation.y += ( targetRotationX - mesh[m].rotation.y ) * 0.05;
+					mesh[m].rotation.x += ( targetRotationY - mesh[m].rotation.x ) * 0.05;
 				}
 				//console.log("before render call");
 				renderer.render( scene, camera );
