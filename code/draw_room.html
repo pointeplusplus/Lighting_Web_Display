@@ -105,8 +105,12 @@
 					//get the texture coordinates for each vertex
 					else if(objFileContents.vectors[o][0] == "vt"){
 						vt.push(new Array());
-						vt[vt.length-1].push(objFileContents.vectors[o][1]);
-						vt[vt.length-1].push(objFileContents.vectors[o][2]);
+//						vt[vt.length-1].push(objFileContents.vectors[o][1]);
+//						vt[vt.length-1].push(objFileContents.vectors[o][2]);
+
+						//multiply texture coordinates by .999 for threejs cutoff
+						vt[vt.length-1].push(objFileContents.vectors[o][1]*0.999);
+						vt[vt.length-1].push(objFileContents.vectors[o][2]*0.999);
 					}
 					//get the normals for each vertex
 					else if(objFileContents.vectors[o][0] == "vn"){
@@ -269,25 +273,53 @@
 				document.addEventListener( 'mouseup', onDocumentMouseUp, false );
 				document.addEventListener( 'mouseout', onDocumentMouseOut, false );
 
-				mouseXOnMouseDown = event.clientX - windowHalfX;
-				targetRotationOnMouseDownX = targetRotationX;
+				switch (event.button){
+					case 0:
+						mouseXOnMouseDown = event.clientX - windowHalfX;
+						targetRotationOnMouseDownX = targetRotationX;
 
-				mouseYOnMouseDown = event.clientY - windowHalfY;
-				targetRotationOnMouseDownY = targetRotationY;
+						mouseYOnMouseDown = event.clientY - windowHalfY;
+						targetRotationOnMouseDownY = targetRotationY;
+						break;
+					case 1:
+						break;
+					case 2:
+						break;
+				}
+				
 
 			}
 
 			function onDocumentMouseMove( event ) {
 
-				mouseX = event.clientX - windowHalfX;
-				mouseY = event.clientY - windowHalfY;
+				switch (event.button){
+					case 0:
+						mouseX = event.clientX - windowHalfX;
+						mouseY = event.clientY - windowHalfY;
 
-				targetRotationX = targetRotationOnMouseDownX + ( mouseX - mouseXOnMouseDown ) * 0.02;
-				targetRotationY = targetRotationOnMouseDownY + ( mouseY - mouseYOnMouseDown ) * 0.02;
+						targetRotationX = targetRotationOnMouseDownX + ( mouseX - mouseXOnMouseDown ) * 0.02;
+						targetRotationY = targetRotationOnMouseDownY + ( mouseY - mouseYOnMouseDown ) * 0.02;
 
+						break;
+					case 1:
+						break;
+					case 2:
+						break;
+				}
+
+				
 			}
 
 			function onDocumentMouseUp( event ) {
+
+				switch (event.button){
+					case 0:
+						break;
+					case 1:
+						break;
+					case 2:
+						break;
+				}
 
 				document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
 				document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
@@ -297,6 +329,15 @@
 
 			function onDocumentMouseOut( event ) {
 
+				switch (event.button){
+					case 0:
+						break;
+					case 1:
+						break;
+					case 2:
+						break;
+				}
+
 				document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
 				document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
 				document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
@@ -305,33 +346,53 @@
 
 			function onDocumentTouchStart( event ) {
 
-				if ( event.touches.length === 1 ) {
+				switch (event.button){
+					case 0:
+						if ( event.touches.length === 1 ) {
 
-					event.preventDefault();
+							event.preventDefault();
 
-					mouseXOnMouseDown = event.touches[ 0 ].pageX - windowHalfX;
-					targetRotationOnMouseDownX = targetRotationX;
+							mouseXOnMouseDown = event.touches[ 0 ].pageX - windowHalfX;
+							targetRotationOnMouseDownX = targetRotationX;
 
-					mouseYOnMouseDown = event.touches[ 0 ].pageY - windowHalfY;
-					targetRotationOnMouseDownY = targetRotationY;
+							mouseYOnMouseDown = event.touches[ 0 ].pageY - windowHalfY;
+							targetRotationOnMouseDownY = targetRotationY;
 
+						}
+						break;
+					case 1:
+						break;
+					case 2:
+						break;
 				}
+
+				
 
 			}
 
 			function onDocumentTouchMove( event ) {
 
-				if ( event.touches.length === 1 ) {
+				switch (event.button){
+					case 0:
+						if ( event.touches.length === 1 ) {
 
-					event.preventDefault();
+							event.preventDefault();
 
-					mouseX = event.touches[ 0 ].pageX - windowHalfX;
-					targetRotationX = targetRotationOnMouseDownX + ( mouseX - mouseXOnMouseDown ) * 0.05;
+							mouseX = event.touches[ 0 ].pageX - windowHalfX;
+							targetRotationX = targetRotationOnMouseDownX + ( mouseX - mouseXOnMouseDown ) * 0.05;
 
-					mouseY = event.touches[ 0 ].pageY - windowHalfY;
-					targetRotationY = targetRotationOnMouseDownY + ( mouseY - mouseYOnMouseDown ) * 0.05;
+							mouseY = event.touches[ 0 ].pageY - windowHalfY;
+							targetRotationY = targetRotationOnMouseDownY + ( mouseY - mouseYOnMouseDown ) * 0.05;
 
+						}
+						break;
+					case 1:
+						break;
+					case 2:
+						break;
 				}
+
+				
 
 			}
 
