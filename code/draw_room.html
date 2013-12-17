@@ -45,16 +45,26 @@
 			var mesh = [];
 			var material = [];
 
+
+			//rotation variables
 			var targetRotationX = 0;
 			var targetRotationY = 0;
 			var targetRotationOnMouseDownX = 0;
 			var targetRotationOnMouseDownY = 0;
 
+			//translation variables
+			var targetTranslationX = 0;
+			var targetTranslationY = 0;
+			var targetTranslationOnMouseDownX = 0;
+			var targetTranslationOnMouseDownY = 0;
+
+			//mouse variables for transformations
 			var mouseX = 0;
 			var mouseXOnMouseDown = 0;
-
 			var mouseY = 0;
 			var mouseYOnMouseDown = 0;
+
+
 
 			var windowHalfX = window.innerWidth / 2;
 			var windowHalfY = window.innerHeight / 2;
@@ -219,16 +229,10 @@
 					mesh[g].position.z = 0;
 					mesh[g].rotation.y = 0;
 					scene.add(mesh[g]);
-		
-					//meshes[g].position.x = 0;
-					//meshes[g].position.y = 0;
-					//meshes[g].position.z = 0;
-					//meshes[g].rotation.x = 0;
-					//meshes[g].rotation.y = 0;
-					//scene.add(meshes[g]);
+
 				}
 				
-				renderer = new THREE.CanvasRenderer();
+				renderer = new THREE.WebGLRenderer({ antialias : true });
 				renderer.setSize( window.innerWidth, window.innerHeight );
 
 				container.appendChild( renderer.domElement );
@@ -284,6 +288,17 @@
 						targetRotationOnMouseDownY = targetRotationY;
 						break;
 					case 1:
+						event.preventDefault();
+
+						document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+						document.addEventListener( 'mouseup', onDocumentMouseUp, false );
+						document.addEventListener( 'mouseout', onDocumentMouseOut, false );
+
+						mouseXOnMouseDown = event.clientX - windowHalfX;
+						targetTranslationOnMouseDownX = targetTranslationX;
+
+						mouseYOnMouseDown = event.clientY - windowHalfY;
+						targetTranslationOnMouseDownY = targetTranslationY;
 						break;
 					case 2:
 						break;
@@ -304,6 +319,11 @@
 
 						break;
 					case 1:
+						mouseX = event.clientX - windowHalfX;
+						mouseY = event.clientY - windowHalfY;
+
+						targetTranslationX = targetTranslationOnMouseDownX + ( mouseX - mouseXOnMouseDown ) * 0.02;
+						targetTranslationY = targetTranslationOnMouseDownY + ( mouseY - mouseYOnMouseDown ) * 0.02;
 						break;
 					case 2:
 						break;
@@ -321,6 +341,9 @@
 						document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
 						break;
 					case 1:
+						document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
+						document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
+						document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
 						break;
 					case 2:
 						break;
@@ -339,6 +362,9 @@
 						document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
 						break;
 					case 1:
+						document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
+						document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
+						document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
 						break;
 					case 2:
 						break;
@@ -365,6 +391,17 @@
 						}
 						break;
 					case 1:
+						if ( event.touches.length === 1 ) {
+
+							event.preventDefault();
+
+							mouseXOnMouseDown = event.touches[ 0 ].pageX - windowHalfX;
+							targetTranslationOnMouseDownX = targetTranslationX;
+
+							mouseYOnMouseDown = event.touches[ 0 ].pageY - windowHalfY;
+							targetTranslationOnMouseDownY = targetTranslationY;
+
+						}
 						break;
 					case 2:
 						break;
@@ -391,6 +428,17 @@
 						}
 						break;
 					case 1:
+						if ( event.touches.length === 1 ) {
+
+							event.preventDefault();
+
+							mouseX = event.touches[ 0 ].pageX - windowHalfX;
+							targetTranslationX = targetTranslationOnMouseDownX + ( mouseX - mouseXOnMouseDown ) * 0.05;
+
+							mouseY = event.touches[ 0 ].pageY - windowHalfY;
+							targetTranslationY = targetTranslationOnMouseDownY + ( mouseY - mouseYOnMouseDown ) * 0.05;
+
+						}
 						break;
 					case 2:
 						break;
@@ -413,9 +461,16 @@
 
 			function render() {
 
+				//apply rotation
 				for(var m = 0; m < mesh.length; m++){
 					mesh[m].rotation.y += ( targetRotationX - mesh[m].rotation.y ) * 0.05;
 					mesh[m].rotation.x += ( targetRotationY - mesh[m].rotation.x ) * 0.05;
+				}
+
+				//apply translation
+				for(var m = 0; m < mesh.length; m++){
+					mesh[m].position.y += ( targetTranslationX - mesh[m].position.y ) * 0.05;
+					mesh[m].rotation.x += ( targetTranslationY - mesh[m].position.x ) * 0.05;
 				}
 
 				if(keyboard.pressed("up")){
@@ -430,9 +485,7 @@
 				if(keyboard.pressed("right")){
 					camera.position.x += 2;
 				}
-				//console.log("before render call");
 				renderer.render( scene, camera );
-				//console.log(" after render call");
 			}
 
 		
