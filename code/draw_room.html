@@ -267,14 +267,16 @@
 			
 			function onDocumentMouseDown( event ) {
 
-				event.preventDefault();
-
-				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-				document.addEventListener( 'mouseup', onDocumentMouseUp, false );
-				document.addEventListener( 'mouseout', onDocumentMouseOut, false );
+				
 
 				switch (event.button){
 					case 0:
+
+						event.preventDefault();
+
+						document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+						document.addEventListener( 'mouseup', onDocumentMouseUp, false );
+						document.addEventListener( 'mouseout', onDocumentMouseOut, false );
 						mouseXOnMouseDown = event.clientX - windowHalfX;
 						targetRotationOnMouseDownX = targetRotationX;
 
@@ -314,6 +316,9 @@
 
 				switch (event.button){
 					case 0:
+						document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
+						document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
+						document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
 						break;
 					case 1:
 						break;
@@ -321,9 +326,7 @@
 						break;
 				}
 
-				document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
-				document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
-				document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
+				
 
 			}
 
@@ -331,6 +334,9 @@
 
 				switch (event.button){
 					case 0:
+						document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
+						document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
+						document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
 						break;
 					case 1:
 						break;
@@ -338,9 +344,7 @@
 						break;
 				}
 
-				document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
-				document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
-				document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
+				
 
 			}
 
