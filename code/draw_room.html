@@ -34,6 +34,11 @@
 
 			var camera, scene, renderer;
 
+			//initial camera location
+			var CAMERA_X = 0;
+			var CAMERA_Y = 10;
+			var CAMERA_Z = 60;
+
 			//stores data found in obj file
 			var v = [];
 			var vt = [];
@@ -57,6 +62,10 @@
 			var targetTranslationY = 0;
 			var targetTranslationOnMouseDownX = 0;
 			var targetTranslationOnMouseDownY = 0;
+
+			//zoom variables
+			var targetZoomY = 0;
+			var targetZoomOnMouseDownY = 0;
 
 			//mouse variables for transformations
 			var mouseX = 0;
@@ -205,9 +214,9 @@
 				container.appendChild( info );
 				//last two values are near and far clipping planes
 				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 5, 90 );
-				camera.position.x = 0;
-				camera.position.y = 10;
-				camera.position.z = 60;
+				camera.position.x = CAMERA_X;
+				camera.position.y = CAMERA_Y;
+				camera.position.z = CAMERA_Z;
 				camera.rotation.x = 0;
 				camera.rotation.y = 0;
 
@@ -271,16 +280,14 @@
 			
 			function onDocumentMouseDown( event ) {
 
-				
-
 				switch (event.button){
 					case 0:
-
+						console.log("On Document Mouse Down Case 0: Left button");
 						event.preventDefault();
 
-						document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-						document.addEventListener( 'mouseup', onDocumentMouseUp, false );
-						document.addEventListener( 'mouseout', onDocumentMouseOut, false );
+						document.addEventListener( 'mousemove', onDocumentMouseMoveRotate, false );
+						document.addEventListener( 'mouseup', onDocumentMouseUpRotate, false );
+						document.addEventListener( 'mouseout', onDocumentMouseOutRotate, false );
 						mouseXOnMouseDown = event.clientX - windowHalfX;
 						targetRotationOnMouseDownX = targetRotationX;
 
@@ -288,11 +295,12 @@
 						targetRotationOnMouseDownY = targetRotationY;
 						break;
 					case 1:
+						console.log("On Document Mouse Down Case 1: Middle button");
 						event.preventDefault();
 
-						document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-						document.addEventListener( 'mouseup', onDocumentMouseUp, false );
-						document.addEventListener( 'mouseout', onDocumentMouseOut, false );
+						document.addEventListener( 'mousemove', onDocumentMouseMoveTranslate, false );
+						document.addEventListener( 'mouseup', onDocumentMouseUpTranslate, false );
+						document.addEventListener( 'mouseout', onDocumentMouseOutTranslate, false );
 
 						mouseXOnMouseDown = event.clientX - windowHalfX;
 						targetTranslationOnMouseDownX = targetTranslationX;
@@ -301,76 +309,97 @@
 						targetTranslationOnMouseDownY = targetTranslationY;
 						break;
 					case 2:
+
+						console.log("On Document Mouse Down Case 2: Right button");
+						event.preventDefault();
+
+						document.addEventListener( 'mousemove', onDocumentMouseMoveZoom, false );
+						document.addEventListener( 'mouseup', onDocumentMouseUpZoom, false );
+						document.addEventListener( 'mouseout', onDocumentMouseOutZoom, false );
+
+						mouseYOnMouseDown = event.clientY - windowHalfY;
+						targetZoomOnMouseDownY = targetZoomY;
 						break;
 				}
 				
 
 			}
 
-			function onDocumentMouseMove( event ) {
+			function onDocumentMouseMoveRotate( event ) {
 
-				switch (event.button){
-					case 0:
-						mouseX = event.clientX - windowHalfX;
-						mouseY = event.clientY - windowHalfY;
+				mouseX = event.clientX - windowHalfX;
+				mouseY = event.clientY - windowHalfY;
 
-						targetRotationX = targetRotationOnMouseDownX + ( mouseX - mouseXOnMouseDown ) * 0.02;
-						targetRotationY = targetRotationOnMouseDownY + ( mouseY - mouseYOnMouseDown ) * 0.02;
-
-						break;
-					case 1:
-						mouseX = event.clientX - windowHalfX;
-						mouseY = event.clientY - windowHalfY;
-
-						targetTranslationX = targetTranslationOnMouseDownX + ( mouseX - mouseXOnMouseDown ) * 0.02;
-						targetTranslationY = targetTranslationOnMouseDownY + ( mouseY - mouseYOnMouseDown ) * 0.02;
-						break;
-					case 2:
-						break;
-				}
-
+				targetRotationX = targetRotationOnMouseDownX + ( mouseX - mouseXOnMouseDown ) * 0.02;
+				targetRotationY = targetRotationOnMouseDownY + ( mouseY - mouseYOnMouseDown ) * 0.02;
 				
 			}
 
-			function onDocumentMouseUp( event ) {
+			function onDocumentMouseMoveTranslate( event ) {
 
-				switch (event.button){
-					case 0:
-						document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
-						document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
-						document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
-						break;
-					case 1:
-						document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
-						document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
-						document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
-						break;
-					case 2:
-						break;
-				}
 
-				
+				mouseX = event.clientX - windowHalfX;
+				mouseY = event.clientY - windowHalfY;
+
+				targetTranslationX = targetTranslationOnMouseDownX + ( mouseX - mouseXOnMouseDown ) * 0.02;
+				targetTranslationY = targetTranslationOnMouseDownY + ( mouseY - mouseYOnMouseDown ) * 0.02;
 
 			}
 
-			function onDocumentMouseOut( event ) {
+			function onDocumentMouseMoveZoom( event ) {
 
-				switch (event.button){
-					case 0:
-						document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
-						document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
-						document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
-						break;
-					case 1:
-						document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
-						document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
-						document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
-						break;
-					case 2:
-						break;
-				}
+				mouseX = event.clientX - windowHalfX;
+				mouseY = event.clientY - windowHalfY;
 
-				
+				targetZoomY = targetZoomOnMouseDownY + ( mouseY - mouseYOnMouseDown ) * 0.02;
+			}
+
+
+			function onDocumentMouseUpRotate( event ) {
+
+
+				document.removeEventListener( 'mousemove', onDocumentMouseMoveRotate, false );
+				document.removeEventListener( 'mouseup', onDocumentMouseUpRotate, false );
+				document.removeEventListener( 'mouseout', onDocumentMouseOutRotate, false );
+
+			}
+
+			function onDocumentMouseUpTranslate( event ) {
+
+				document.removeEventListener( 'mousemove', onDocumentMouseMoveTranslate, false );
+				document.removeEventListener( 'mouseup', onDocumentMouseUpTranslate, false );
+				document.removeEventListener( 'mouseout', onDocumentMouseOutTranslate, false );
+			}
+
+			function onDocumentMouseUpZoom( event ) {
+
+				document.removeEventListener( 'mousemove', onDocumentMouseMoveZoom, false );
+				document.removeEventListener( 'mouseup', onDocumentMouseUpZoom, false );
+				document.removeEventListener( 'mouseout', onDocumentMouseOutZoom, false );
+			}
+
+			function onDocumentMouseOutRotate( event ) {
+
+
+				document.removeEventListener( 'mousemove', onDocumentMouseMoveRotate, false );
+				document.removeEventListener( 'mouseup', onDocumentMouseUpRotate, false );
+				document.removeEventListener( 'mouseout', onDocumentMouseOutRotate, false );
+
+			}
+
+			function onDocumentMouseOutTranslate( event ) {
+
+				document.removeEventListener( 'mousemove', onDocumentMouseMoveTranslate, false );
+				document.removeEventListener( 'mouseup', onDocumentMouseUpTranslate, false );
+				document.removeEventListener( 'mouseout', onDocumentMouseOutTranslate, false );
+
+			}
+
+			function onDocumentMouseOutZoom( event ) {
+
+				document.removeEventListener( 'mousemove', onDocumentMouseMoveZoom, false );
+				document.removeEventListener( 'mouseup', onDocumentMouseUpZoom, false );
+				document.removeEventListener( 'mouseout', onDocumentMouseOutZoom, false );
 
 			}
 
@@ -404,6 +433,15 @@
 						}
 						break;
 					case 2:
+						if ( event.touches.length === 1 ) {
+
+							event.preventDefault();
+
+							mouseYOnMouseDown = event.touches[ 0 ].pageY - windowHalfY;
+							targetZoomOnMouseDownY = targetZoomY;
+
+						}
+
 						break;
 				}
 
@@ -441,6 +479,15 @@
 						}
 						break;
 					case 2:
+
+						if ( event.touches.length === 1 ) {
+
+								event.preventDefault();
+
+								mouseY = event.touches[ 0 ].pageY - windowHalfY;
+								targetZoomY = targetZoomOnMouseDownY + ( mouseY - mouseYOnMouseDown ) * 0.05;
+
+						}
 						break;
 				}
 
@@ -448,7 +495,6 @@
 
 			}
 
-			//
 
 			function animate() {
 
@@ -462,6 +508,7 @@
 			function render() {
 
 				//apply rotation
+				//use oposite target rotation because we want to rotate around axis perpendicular to mouse movement
 				for(var m = 0; m < mesh.length; m++){
 					mesh[m].rotation.y += ( targetRotationX - mesh[m].rotation.y ) * 0.05;
 					mesh[m].rotation.x += ( targetRotationY - mesh[m].rotation.x ) * 0.05;
@@ -469,10 +516,13 @@
 
 				//apply translation
 				for(var m = 0; m < mesh.length; m++){
-					mesh[m].position.y += ( targetTranslationX - mesh[m].position.y ) * 0.05;
-					mesh[m].rotation.x += ( targetTranslationY - mesh[m].position.x ) * 0.05;
+					mesh[m].position.y += ( targetTranslationY - mesh[m].position.y ) * 0.05;
+					mesh[m].position.x += ( targetTranslationX - mesh[m].position.x ) * 0.05;
+				//	console.log("Target Translation Y " + targetTranslationY + " Mesh position y: " + mesh[m].position.y);
 				}
+				camera.position.z += (CAMERA_Z + targetZoomY - camera.position.z ) * 0.05;
 
+				//keyboard controls
 				if(keyboard.pressed("up")){
 					camera.position.z -= 2;
 				}
