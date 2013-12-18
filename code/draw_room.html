@@ -276,8 +276,13 @@
 				renderer.setSize( window.innerWidth, window.innerHeight );
 
 			}
+			//These two functions keep the right click menu from coming up
+			function mouseDown(e) {
+				if (e.which==3) {//righClick
+				}
+			}
+			function RightMouseDown() { return false;}
 
-			
 			function onDocumentMouseDown( event ) {
 
 				switch (event.button){
@@ -309,6 +314,9 @@
 						targetTranslationOnMouseDownY = targetTranslationY;
 						break;
 					case 2:
+						//These two lines keep the right click menu from coming up. (call other functions)
+						document.oncontextmenu=RightMouseDown;
+						document.onmousedown = mouseDown; 
 
 						console.log("On Document Mouse Down Case 2: Right button");
 						event.preventDefault();
