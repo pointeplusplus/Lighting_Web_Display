@@ -33,11 +33,19 @@
 			var container, stats;
 
 			var camera, scene, renderer;
+			
 
 			//initial camera location
 			var CAMERA_X = 0;
 			var CAMERA_Y = 10;
 			var CAMERA_Z = 60;
+
+			//size of canvas
+			var HEIGHT = 500;
+			var WIDTH = 500;
+
+			//set height and width of renderer
+			
 
 			//stores data found in obj file
 			var v = [];
@@ -213,7 +221,8 @@
 				info.innerHTML = '';
 				container.appendChild( info );
 				//last two values are near and far clipping planes
-				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 5, 90 );
+				//camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 5, 120 );
+				camera = new THREE.PerspectiveCamera( 70, WIDTH / HEIGHT, 5, 120 );
 				camera.position.x = CAMERA_X;
 				camera.position.y = CAMERA_Y;
 				camera.position.z = CAMERA_Z;
@@ -242,7 +251,8 @@
 				}
 				
 				renderer = new THREE.WebGLRenderer({ antialias : true });
-				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.setSize(WIDTH,HEIGHT);
+				//renderer.setSize( window.innerWidth, window.innerHeight );
 
 				container.appendChild( renderer.domElement );
 
@@ -277,6 +287,7 @@
 
 			}
 			//These two functions keep the right click menu from coming up
+			//http://stackoverflow.com/questions/6789843/disable-right-click-menu-in-chrome
 			function mouseDown(e) {
 				if (e.which==3) {//righClick
 				}
