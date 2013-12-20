@@ -41,8 +41,10 @@
 			var CAMERA_Z = 60;
 
 			//size of canvas
-			var HEIGHT = 500;
-			var WIDTH = 500;
+			//var HEIGHT = 500;
+			//var WIDTH = 500;
+			var HEIGHT = window.innerHeight;
+			var WIDTH = window.innerWidth / 2;
 
 			//set height and width of renderer
 			
@@ -265,13 +267,9 @@
 				document.addEventListener( 'touchstart', onDocumentTouchStart, false );
 				document.addEventListener( 'touchmove', onDocumentTouchMove, false );
 
-				
-
 				window.addEventListener( 'resize', onWindowResize, false );
 
 				keyboard = new THREEx.KeyboardState();
-
-
 
 			}
 
